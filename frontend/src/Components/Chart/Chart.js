@@ -1,5 +1,5 @@
-import React from 'react'
-import {Chart as ChartJs, 
+import React from 'react';
+import { Chart as ChartJs, 
     CategoryScale,
     LinearScale,
     PointElement,
@@ -8,12 +8,11 @@ import {Chart as ChartJs,
     Tooltip,
     Legend,
     ArcElement,
-} from 'chart.js'
-
-import {Line} from 'react-chartjs-2'
-import styled from 'styled-components'
-import { useGlobalContext } from '../../context/globalContext'
-import { dateFormat } from '../../utils/dateFormat'
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import styled from 'styled-components';
+import { useGlobalContext } from '../../context/globalContext';
+import { dateFormat } from '../../utils/dateFormat';
 
 ChartJs.register(
     CategoryScale,
@@ -24,51 +23,56 @@ ChartJs.register(
     Tooltip,
     Legend,
     ArcElement,
-)
+);
 
-function Chart() {
-    const {incomes, expenses} = useGlobalContext()
+function IncomeChart() {
+    const { incomes } = useGlobalContext();
 
-    // Sort incomes and expenses by date
+    // Sort incomes by date
     const sortedIncomes = incomes.sort((a, b) => new Date(a.date) - new Date(b.date));
-    const sortedExpenses = expenses.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const data = {
-        labels: sortedIncomes.map((inc) =>{
-            const {date} = inc
-            return dateFormat(date)
-        }),
+        labels: sortedIncomes.map((inc) => dateFormat(inc.date)),
         datasets: [
             {
                 label: 'Income',
-                data: [
-                    ...sortedIncomes.map((income) => {
-                        const {amount} = income
-                        return amount
-                    })
-                ],
+                data: sortedIncomes.map((income) => income.amount),
                 backgroundColor: 'green',
-                tension: .2
+                tension: 0.2,
             },
-            {
-                label: 'Expenses',
-                data: [
-                    ...sortedExpenses.map((expense) => {
-                        const {amount} = expense
-                        return amount
-                    })
-                ],
-                backgroundColor: 'red',
-                tension: .2
-            }
-        ]
-    }
+        ],
+    };
 
     return (
-        <ChartStyled >
+        <ChartStyled>
             <Line data={data} />
         </ChartStyled>
-    )
+    );
+}
+
+function ExpenseChart() {
+    const { expenses } = useGlobalContext();
+
+    // Sort expenses by date
+    const sortedExpenses = expenses.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const data = {
+        labels: sortedExpenses.map((exp) => dateFormat(exp.date)),
+        datasets: [
+            {
+                label: 'Expenses',
+                data: sortedExpenses.map((expense) => expense.amount),
+                backgroundColor: 'red',
+                tension: 0.2,
+            },
+        ],
+    };
+
+    return (
+        <ChartStyled>
+            <Line data={data} />
+        </ChartStyled>
+    );
 }
 
 const ChartStyled = styled.div`
@@ -80,4 +84,4 @@ const ChartStyled = styled.div`
     height: 100%;
 `;
 
-export default Chart
+export { IncomeChart, ExpenseChart };

@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react'
-import styled from 'styled-components'
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 import History from '../../History/History';
 import { InnerLayout } from '../../styles/Layouts';
 import { peso } from '../../utils/Icons';
-import Chart from '../Chart/Chart';
+import { IncomeChart, ExpenseChart } from '../Chart/Chart';
 
 function Dashboard() {
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext()
+    const {totalExpenses, incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext();
 
     useEffect(() => {
-        getIncomes()
-        getExpenses()
-    }, [])
+        getIncomes();
+        getExpenses();
+    }, []);
 
     return (
         <DashboardStyled>
@@ -20,7 +20,8 @@ function Dashboard() {
                 <h1>All Transactions</h1>
                 <div className="stats-con">
                     <div className="chart-con">
-                        <Chart />
+                        <IncomeChart />
+                        <ExpenseChart />
                         <div className="amount-con">
                             <div className="income">
                                 <h2>Total Income</h2>
@@ -66,67 +67,82 @@ function Dashboard() {
                 </div>
             </InnerLayout>
         </DashboardStyled>
-    )
+    );
 }
 
 const DashboardStyled = styled.div`
-    .stats-con{
+    .stats-con {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: 2rem;
-        .chart-con{
+        
+        .chart-con {
             grid-column: 1 / 4;
             height: 400px;
-            .amount-con{
+
+            .amount-con {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
                 gap: 2rem;
                 margin-top: 2rem;
-                .income, .expense{
+
+                .income, .expense {
                     grid-column: span 2;
                 }
-                .income, .expense, .balance{
+
+                .income, .expense, .balance {
                     background: #FCF6F9;
                     border: 2px solid #FFFFFF;
                     box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
                     border-radius: 20px;
                     padding: 1rem;
-                    p{
+                    
+                    p {
                         font-size: 3.5rem;
                         font-weight: 700;
                     }
                 }
 
-                .balance{
+                .balance {
                     grid-column: 2 / 4;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    p{
+                    
+                    p {
                         color: var(--color-green);
                         opacity: 0.6;
                         font-size: 4.5rem;
                     }
                 }
             }
+
+            // Add margin between the charts
+            > *:not(:last-child) {
+                margin-bottom: 2rem;  // Adjust this value as needed
+            }
         }
 
-        .history-con{
+        .history-con {
             grid-column: 4 / -1;
-            h2{
+            
+            h2 {
                 margin: 1rem 0;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
             }
-            .salary-title{
+
+            .salary-title {
                 font-size: 1.2rem;
-                span{
+
+                span {
                     font-size: 1.8rem;
                 }
             }
-            .salary-item{
+
+            .salary-item {
                 background: #FCF6F9;
                 border: 2px solid #FFFFFF;
                 box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
@@ -135,7 +151,8 @@ const DashboardStyled = styled.div`
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                p{
+
+                p {
                     font-weight: 600;
                     font-size: 1.6rem;
                 }
@@ -144,4 +161,4 @@ const DashboardStyled = styled.div`
     }
 `;
 
-export default Dashboard
+export default Dashboard;
